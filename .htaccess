@@ -1,0 +1,3 @@
+rewriteengine on
+rewritebase /mvc_learn5
+rewriterule ^(.*)$ public/$1 [qsa,l]
