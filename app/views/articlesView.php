@@ -1,9 +1,10 @@
 <?php
 $pageName = "Makaleler";
 require_once 'theme/topView.php';
-$countArticle = $params[1];
+$countArticle = $params['count_page'];
 $articlePageLimit = $params['config']['article_page_limit'];
 $totalPage = $countArticle / $articlePageLimit;
+if ($totalPage < 1) $totalPage = 1;
 $nowPage = $params['now_page'];
 ?>
 
@@ -15,11 +16,12 @@ $nowPage = $params['now_page'];
                 <h3 class="pb-4 mb-4 fst-italic border-bottom">
                     Blog Yazilarim
                 </h3>
-                <?php foreach ($params[0] as $article) {?>
+                <?php foreach ($params['articles'] as $article) {?>
                 <article class="blog-post">
                     <h2 class="blog-post-title mb-1"><?=$article->getTitle()?></h2>
                     <p class="blog-post-meta"><?= $article->getCreatedDate()?> by <a href="#">Mazhar</a></p>
                     <?=$article->getSummary()?>
+                    <a href="<?=$config['root_url']?>article/readarticle/article/<?=$article->getId()?>">Devamini Oku</a>
                     
                 </article>
                 <?php } ?>
@@ -29,24 +31,22 @@ $nowPage = $params['now_page'];
                     for ($i = 1; $i <= $totalPage; $i++) {
                         if ($i == $nowPage) {?>
                             <a class="btn btn-outline-secondary rounded-pill disabled" ><?=$i?></a>
-                    <?php } else {?>
+                    <?php } else {
+                                if (!isset ($params['now_category'])) {
+                    ?>
                             <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>article/default/page/<?=$i?>"><?=$i?></a>
-                    <?php }
-                    }?>
+                    <?php } else {?>
+                                <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>article/default/category/<?=$params['now_category']?>/page/<?=$i?>"><?=$i?></a>
+                        <?php
+                    
+                        }
+                    }
+                }?>
                 </nav>
 
             </div>
             <div class="col-md-4">
-                <header class="bg-gray-100 p-2 shadow rounded-3 border border-2 border-dark">
-                    <h5 class = "text-gray-200 rounded-3">Kategoriler</h5>
-                </header>
-                <ul class="dropdown-menu position-static d-grid gap-1 mt-2 p-2 rounded-3 mx-0 shadow border border-2 border-dark">
-                    <li><a class="dropdown-item rounded-2 active" href="#">Action</a></li>
-                    <li><a class="dropdown-item rounded-2" href="#">Another action</a></li>
-                    <li><a class="dropdown-item rounded-2" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item rounded-2" href="#">Separated link</a></li>
-                </ul>
+                <?php require_once 'theme/menuView.php'?>
             </div>
         </div>
 
@@ -54,20 +54,6 @@ $nowPage = $params['now_page'];
     </main>
 
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -26,7 +26,32 @@ class App
 
         $controllerAction           = $urlArray[0] . 'Action' . $this->method;
         array_shift($urlArray);
-        $this->params = $urlArray;
+
+        // parametreleri key => value seklinde ayarlama yapiyorum
+        if (count($urlArray) >= 2 ){
+            for ($i = 0; $i < count($urlArray); $i += 2) {
+                // burada da asagida now_controller ve now_action parametreleri ile cakismamasi icin
+                // gerekli kontrolleri yapiyorum
+                if ($urlArray[$i] != 'now_controller' && $urlArray[$i] != 'now_action') {
+                    if (isset($urlArray[$i+1]))
+                        $this->params[$urlArray[$i]] = $urlArray[$i+1];
+                    else
+                        $this->params[$urlArray[$i]] = 'default';
+                } else {
+
+                    if (isset($urlArray[$i+1]))
+                        $this->params['wrong_key'.$i] = $urlArray[$i+1];
+                    else
+                        $this->params['wrong_key'.$i] = 'default';
+                }
+            }
+        } else {
+            $this->params = [];
+        }
+
+        // view'lerde lazim olacak controller ve action parametreleri
+        $this->params['now_controller'] = $controllerClass;
+        $this->params['now_action'] = $controllerAction;
 
         if (file_exists($controllerFile)) {
             require_once $controllerFile;
