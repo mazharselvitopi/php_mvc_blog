@@ -11,7 +11,7 @@ $config = [
             'entities_dir'              => '../app/entities/',
             'views_dir'                 => '../app/views/',
             
-            'main_url'                  => 'main/default',
+            'main_url'                  => 'main/index',
 
             'db_dsn'                    => 'mysql:host=localhost;dbname=blog;charset=utf8',
             'db_usr'                    => 'root',

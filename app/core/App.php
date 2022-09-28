@@ -62,13 +62,16 @@ class App
                     $this->action = $controllerAction;
                     call_user_func_array([$this->controller, $this->action], [$this->params]);
                 } else {
-                    exit ('Action bulunamadi: '. $controllerAction);
+                    header('Location: '.$config['root_url'].'main/actionNotFound');
+                    //exit ('Action bulunamadi: '. $controllerAction);
                 }
             } else {
-                exit ('Controller class\'i bulunamadi: '. $controllerClass);
+                header('Location: '.$config['root_url'].'main/controllerNotFound');
+                //exit ('Controller class\'i bulunamadi: '. $controllerClass);
             }
         } else {
-            exit ('Controller dosyasi bulunamadi: '. $controllerFile);
+            header('Location: '.$config['root_url'].'main/controllerFileNotFound');
+            //exit ('Controller dosyasi bulunamadi: '. $controllerFile);
         }
     }
 

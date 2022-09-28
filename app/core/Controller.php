@@ -18,10 +18,11 @@ class Controller
                 $serviceClass->setConfig ($this->config);
                 return $serviceClass;
             } else {
-                exit ('Service sinifi bulunamadi: ' . $serviceClass);
+                header('Location: '.$config['root_url'].'main/serviceNotFound');
+                //exit ('Service sinifi bulunamadi: ' . $serviceClass);
             }
         } else {
-            exit ('Service dosyasi bulunamadi: ' . $serviceFile);
+            header('Location: '.$config['root_url'].'main/serviceFileNotFound');
         }
     }
 

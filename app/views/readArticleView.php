@@ -1,7 +1,9 @@
 <?php
-$pageName = "Makaleler";
+
 require_once 'theme/topView.php';
 $article = $params['article'];
+
+$pageName = $article->getTitle();
 ?>
 
 <div class="p-3">
@@ -9,6 +11,7 @@ $article = $params['article'];
 
         <div class="row">
             <div class="col-md-8 shadow p-3">
+            <?php require_once 'theme/alertView.php';?>
                 <article class="blog-post">
                     <h2 class="blog-post-title mb-1"><?=$article->getTitle()?></h2>
                     <p class="blog-post-meta"><?= $article->getCreatedDate()?> by <a href="#">Mazhar</a></p>

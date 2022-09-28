@@ -10,7 +10,8 @@ class View
             $output = ob_get_clean();
             echo $output;
         } else {
-            exit ('View dosyasi bulunamadi: ' . $viewFile);
+            header('Location: '.$config['root_url'].'main/viewFileNotFound');
+            //exit ('View dosyasi bulunamadi: ' . $viewFile);
             // YONLENDIRME
             // header ("Location: http://domain.com/folder/page.html", 301);
             // exit ();

@@ -20,10 +20,12 @@ class Service
                 $repoClass->setConfig ($this->config);
                 return $repoClass;
             } else {
-                exit ('Repo sinifi bulunamadi: ' . $repoClass);
+                header('Location: '.$config['root_url'].'main/repoNotFound');
+                //exit ('Repo sinifi bulunamadi: ' . $repoClass);
             }
         } else {
-            exit ('Repo dosyasi bulunamadi: ' . $repoFile);
+            header('Location: '.$config['root_url'].'main/repoFileNotFound');
+            //exit ('Repo dosyasi bulunamadi: ' . $repoFile);
         }
     }
 

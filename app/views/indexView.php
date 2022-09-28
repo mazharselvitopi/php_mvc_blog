@@ -1,11 +1,12 @@
 <?php
-$pageName = "Makaleler";
-require_once 'theme/topView.php';
+$pageName = "Anasayfa";
 $countArticle = $params['count_page'];
 $articlePageLimit = $params['config']['article_page_limit'];
 $totalPage = $countArticle / $articlePageLimit;
 if ($totalPage < 1) $totalPage = 1;
 $nowPage = $params['now_page'];
+require_once 'theme/topView.php';
+
 ?>
 
 <div class="p-3">
@@ -13,6 +14,7 @@ $nowPage = $params['now_page'];
 
         <div class="row">
             <div class="col-md-8 shadow p-3">
+                <?php require_once 'theme/alertView.php';?>
                 <h3 class="pb-4 mb-4 fst-italic border-bottom">
                     Blog Yazilarim
                 </h3>
@@ -21,7 +23,7 @@ $nowPage = $params['now_page'];
                     <h2 class="blog-post-title mb-1"><?=$article->getTitle()?></h2>
                     <p class="blog-post-meta"><?= $article->getCreatedDate()?> by <a href="#">Mazhar</a></p>
                     <?=$article->getSummary()?>
-                    <a href="<?=$config['root_url']?>article/readarticle/article/<?=$article->getId()?>">Devamini Oku</a>
+                    <a href="<?=$config['root_url']?>main/read/article/<?=$article->getId()?>">Devamini Oku</a>
                     
                 </article>
                 <?php } ?>
@@ -34,9 +36,9 @@ $nowPage = $params['now_page'];
                     <?php } else {
                                 if (!isset ($params['now_category'])) {
                     ?>
-                            <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>article/default/page/<?=$i?>"><?=$i?></a>
+                            <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>main/index/page/<?=$i?>"><?=$i?></a>
                     <?php } else {?>
-                                <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>article/default/category/<?=$params['now_category']?>/page/<?=$i?>"><?=$i?></a>
+                                <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>main/index/category/<?=$params['now_category']?>/page/<?=$i?>"><?=$i?></a>
                         <?php
                     
                         }
