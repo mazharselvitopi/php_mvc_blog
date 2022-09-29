@@ -1,5 +1,5 @@
 <?php
-$pageName = "Anasayfa";
+
 $countArticle = $params['count_page'];
 $articlePageLimit = $params['config']['article_page_limit'];
 $totalPage = $countArticle / $articlePageLimit;

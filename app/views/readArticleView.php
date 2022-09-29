@@ -3,7 +3,6 @@
 require_once 'theme/topView.php';
 $article = $params['article'];
 
-$pageName = $article->getTitle();
 ?>
 
 <div class="p-3">

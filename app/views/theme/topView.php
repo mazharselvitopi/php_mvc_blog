@@ -1,10 +1,11 @@
+
 <!doctype html>
 <html lang="tr">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Mazhar Selvitopi - Blog">
-    <title><?=$pageName?></title>
+    <title><?=$params['page_name']?></title>
     
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -110,11 +111,16 @@
           <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
             <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search">
           </form>
-
+          <?php if ($params['is_entered']):?>
+          <div class="text-end">
+                <a href="<?=$params['config']['root_url']?>main/logout" class="btn btn-danger">Logout</a>
+          </div>
+          <?php else: ?>
           <div class="text-end">
             <button type="button" class="btn btn-outline-light me-2" data-bs-toggle="modal" data-bs-target="#modalSignin">Login</button>
             <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalSignup">Sign-up</button>
           </div>
+          <?php endif; ?>
         </div>
       </div>
     </header>

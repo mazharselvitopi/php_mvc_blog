@@ -15,14 +15,49 @@ class MainController extends Controller
  * 
  */
 
-    public function loginActionGetRequest ($params = [])
+    public function loginActionPostRequest ($params = [])
     {
+        if (isset($params['is_entered'])) {
+            
+            if ($params['is_entered'] != true) {
+                $userService = $this->service('User');
+                $data = [];
+                if (isset($_POST['email']) && isset($_POST['password'])){
+                    
+                    $data = $userService->isCorrectEmailAndPassword($_POST['email'], $_POST['password']);
+                }
 
+                if ($data != null) {
+                    echo 'girdim';
+                    $_SESSION['username'] = $data['email'];
+                    $_SESSION['password'] = $data['password'];
+                    $this->redirect('main/index');
+                }else {
+                    $this->alertReturn($params, 
+                    'danger', 
+                    'Kullanici yok', 
+                    'Lutfen bir daha deneyin', 
+                    $this->config['root_url'].'main/index', 
+                    'Anasayfaya gidin.' );
+                }
+
+            } else {
+                $this->redirect('main/index');
+            }
+        }
+        //$this->redirect('main/index');
     }
 
     public function logoutActionGetRequest ($params = [])
     {
-
+        if ($params['is_entered'] == true) {
+            $params['is_entered'] = false;
+            session_destroy();
+            $this->redirect('main/index');
+        } else {
+            $this->alertReturn($params, 'warning', 'Yetkisiz erisim istegi', 'Bu sayfaya erisiminiz yok',
+                                $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
     }
 
     public function signupActionGetRequest ($params = [])
@@ -33,224 +68,45 @@ class MainController extends Controller
 
     public function indexActionGetRequest ($params = [])
     {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
 
         $articleService = $this->service("Article");
         
         $data = $articleService->getArticles($params);
-        $articles = $data['articles'];
-        $countPage = $data['count_page'];
-        $nowPage = $data['now_page'];
+        $params['articles'] = $data['articles'];
+        $params['count_page'] = $data['count_page'];
+        $params['now_page'] = $data['now_page'];
 
         if (isset ($params['category']))
-        $nowCategory = $params['category'];
+        $params['now_category'] = $params['category'];
 
         $categoryService = $this->service("Category");
-        $allCategories = $categoryService->getCategoryList();
-        
-        if (!isset($params['category']))
-            $this->render("index", [ 
-                                        'articles' => $articles, 
-                                        'count_page' =>$countPage, 
-                                        'config' => $this->config, 
-                                        'now_page' => $nowPage, 
-                                        'categories' => $allCategories,
-                                        'now_action' => $nowAction,
-                                        'now_controller' => $nowController,
-                                        
-                                        
-                                    ]);
-        else 
-            $this->render("index", [ 
-                                        'articles' => $articles, 
-                                        'count_page' =>$countPage, 
-                                        'config' => $this->config, 
-                                        'now_page' => $nowPage, 
-                                        'categories' => $allCategories,
-                                        'now_action' => $nowAction,
-                                        'now_controller' => $nowController,
-                                        'now_category' => $nowCategory
-                                    ]);
+        $params['categories'] = $categoryService->getCategoryList();
+
+
+        $this->render("index", $params);
 
     }
 
-    /**
-                'alert' =>  [
-                                'type' => 'success', 
-                                'title' => 'Deneme', 
-                                'content' => 'Gelecek icin umit',
-                                'link' => 'http://www.mazharselvitopi.com',
-                                'link_title' => 'www.mazharselvitopi.com'
-                            ]
-     */
-
     public function readActionGetRequest ($params = [])
     {
-       $nowController = $params['now_controller'];
-       $nowAction = $params['now_action'];
 
        $articleId = $params['article'];
 
        $articleService = $this->service("Article");
 
-       $article = $articleService->getArticle($articleId);
+       $params['article'] = $articleService->getArticle($articleId);
 
        $categoryService = $this->service('Category');
-       $categories = $categoryService->getCategoryList();
+       $params['categories'] = $categoryService->getCategoryList();
 
-       $nowCategory = $article->getCategoryId();
+       $params['now_category'] = $params['article']->getCategoryId();
 
-       $this->render('readArticle', [   'article'           => $article, 
-                                        'now_controller'    => $nowController,
-                                        'now_action'        => $nowAction,
-                                        'config'            => $this->config,
-                                        'categories'        => $categories,
-                                        'now_category'      => $nowCategory
-       ] );
+       $this->render('readArticle', $params );
     }
 
 
 
-    //////////////  Hatalar //////////////////////////
-    /**                                             //
-     * controllerFileNotFound                       //
-     * controllerNotFound                           //
-     * actionNotFound                               //
-     * repoFileNotFound                             //
-     * repoNotFound                                 //
-     * viewFileNotFound                             //
-     * serviceFileNotFound                          //
-     * serviceNotFound                              //
-     */                                             //
-    //////////////////////////////////////////////////
-
-    public function controllerFileNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'File not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function controllerNotFoundActionGetRequest ($params = [])
-    {
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'Controller not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function actionNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'Action not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function repoNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Repo not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function repoFileNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Repo file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function viewFileNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'View file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function serviceNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Service not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
-    public function serviceFileNotFoundActionGetRequest ($params = [])
-    {
-        $nowController = $params['now_controller'];
-        $nowAction = $params['now_action'];
-
-        $this->render ('notFound', [
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Service file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
-    }
-
+    
     
 
 }
