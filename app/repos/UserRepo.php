@@ -22,6 +22,12 @@ class UserRepo extends Repo
         return $userEntity;
     }
 
+    public function doesEmailExist ($email)
+    {
+        $userData = $this->fetch ("select * from users where email = ?", [$email]);
+        return $userData;
+    }
+
     public function isCorrectEmailAndPassword ($email, $password)
     {
         $userData = $this->fetch ("select * from users where email = ? and password = ?", [$email, $password]);
@@ -31,8 +37,14 @@ class UserRepo extends Repo
 
     public function addUser ($name, $surname, $email, $password)
     {
-        $query = "inser into users (name, surname, email, password) values (?, ?, ?, ?)";
-        return $this->query($query, [$name, $surname, $email, $password]);
+        $query = "insert into users (name, surname, email, password) values (?, ?, ?, ?)";
+        $stmt = $this->db->prepare ($query);
+        $stmt->bindValue(1, $name, PDO::PARAM_STR);
+        $stmt->bindValue(2, $surname, PDO::PARAM_STR);
+        $stmt->bindValue(3, $email, PDO::PARAM_STR);
+        $stmt->bindValue(4, $password, PDO::PARAM_STR);
+        
+        return $stmt->execute();
     }
 
     public function updateUser ($name, $surname, $email, $password)

@@ -24,7 +24,7 @@ class MainController extends Controller
                 $data = [];
                 if (isset($_POST['email']) && isset($_POST['password'])){
                     
-                    $data = $userService->isCorrectEmailAndPassword($_POST['email'], $_POST['password']);
+                    $data = $userService->isCorrectEmailAndPassword($_POST['email'], $this->encrypt($_POST['password']));
                 }
 
                 if ($data != null) {
@@ -60,9 +60,53 @@ class MainController extends Controller
         }
     }
 
-    public function signupActionGetRequest ($params = [])
+    public function signupActionPostRequest ($params = [])
     {
 
+        if ($_POST['name'] != '' && 
+        $_POST['surname'] != '' && 
+        $_POST['email'] != '' && 
+        $_POST['password'] != '' && 
+        $_POST['re_password'] != '')
+        {
+            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
+            {
+                if ($_POST['password'] == $_POST['re_password'])
+                {
+                    $userService = $this->service("User");
+                    $doesEmailExist = $userService->doesEmailExist($_POST['email']);
+
+                    if ($doesEmailExist == null)
+                    {
+                        $userService->addUser($_POST['name'], $_POST['surname'], $_POST['email'], $this->encrypt($_POST['password']));
+                        $this->alertReturn($params, 'success', 'Tebrikler..', 'Tebrik ederiz. Basariyla kaydoldunuz. Simdi giris yapabilirsiniz.',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+                    }
+                    else 
+                    {
+                        $this->alertReturn($params, 'warning', 'Email Adresi Kullaniliyor', 'Bu email adresi kullanilmaktadir. Lutfen baska bir email adresi giriniz.',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+                    }
+                } 
+                else 
+                {
+                    $this->alertReturn($params, 'warning', 'Parola Uyusmazligii', 'Lutfen uyumlu parola girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+                }
+            }
+            else
+            {
+                $this->alertReturn($params, 'warning', 'Email gecersiz', 'Lutfen gecerli bir email adresi girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+            }
+        }
+        else
+        {
+            $this->alertReturn($params, 'warning', 'Bos alan', 'Bos alan girilemez',
+                                $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+
+        
     }
 
 

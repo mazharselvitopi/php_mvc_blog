@@ -114,6 +114,7 @@
           <?php if ($params['is_entered']):?>
           <div class="text-end">
                 <a href="<?=$params['config']['root_url']?>main/logout" class="btn btn-danger">Logout</a>
+                <a href="<?=$params['config']['root_url']?>admin/index" class="btn btn-success">Admin Panel</a>
           </div>
           <?php else: ?>
           <div class="text-end">

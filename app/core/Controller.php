@@ -31,6 +31,13 @@ class Controller
         View::render($this->config, $view, $params);
     }
 
+    public function encrypt ($pass) 
+    {
+        $pass = sha1(base64_encode(md5(base64_encode($_POST['password']))));
+        $pass = substr($pass, 0, 32);
+        return $pass;
+    }
+
     public function redirect ($url) 
     {
         header('Location: '.$this->config['root_url'].$url);

@@ -14,6 +14,12 @@ class UserService extends Service
         return $userRepo->getUser($email);
     }
 
+    public function doesEmailExist ($email)
+    {
+        $userRepo = $this->repo('User');
+        return $userRepo->doesEmailExist ($email);
+    }
+
     public function isCorrectEmailAndPassword ($email, $password)
     {
         $userRepo = $this->repo('User');
