@@ -62,48 +62,45 @@ class MainController extends Controller
 
     public function signupActionPostRequest ($params = [])
     {
+        $name = $_POST['name'];
+        $surname = $_POST['surname'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $rePassword = $_POST['re_password'];
+        $userService = $this->service("User");
+        
 
-        if ($_POST['name'] != '' && 
-        $_POST['surname'] != '' && 
-        $_POST['email'] != '' && 
-        $_POST['password'] != '' && 
-        $_POST['re_password'] != '')
+        $isEmpty = $name == '' || $surname == '' || $email == '' || $password == '' || $rePassword == '';
+        $validateEmail = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+        $isEqualPasswordAndRePassword = $password == $rePassword;
+        $doesEmailExist = $userService->doesEmailExist($_POST['email']) == null;
+
+        if (!$isEmpty && $validateEmail && $isEqualPasswordAndRePassword && $doesEmailExist)
         {
-            if (filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))
-            {
-                if ($_POST['password'] == $_POST['re_password'])
-                {
-                    $userService = $this->service("User");
-                    $doesEmailExist = $userService->doesEmailExist($_POST['email']);
-
-                    if ($doesEmailExist == null)
-                    {
-                        $userService->addUser($_POST['name'], $_POST['surname'], $_POST['email'], $this->encrypt($_POST['password']));
-                        $this->alertReturn($params, 'success', 'Tebrikler..', 'Tebrik ederiz. Basariyla kaydoldunuz. Simdi giris yapabilirsiniz.',
-                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
-                    }
-                    else 
-                    {
-                        $this->alertReturn($params, 'warning', 'Email Adresi Kullaniliyor', 'Bu email adresi kullanilmaktadir. Lutfen baska bir email adresi giriniz.',
-                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
-                    }
-                } 
-                else 
-                {
-                    $this->alertReturn($params, 'warning', 'Parola Uyusmazligii', 'Lutfen uyumlu parola girin',
-                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
-                }
-            }
-            else
-            {
-                $this->alertReturn($params, 'warning', 'Email gecersiz', 'Lutfen gecerli bir email adresi girin',
-                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
-            }
+            $userService->addUser($_POST['name'], $_POST['surname'], $_POST['email'], $this->encrypt($_POST['password']));
+            
+            $this->alertReturn($params, 'success', 'Tebrikler..', 'Tebrik ederiz. Basariyla kaydoldunuz. Simdi giris yapabilirsiniz.',
+                                $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
         }
-        else
+        elseif ($isEmpty)
         {
             $this->alertReturn($params, 'warning', 'Bos alan', 'Bos alan girilemez',
                                 $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$validateEmail)
+        {
+            $this->alertReturn($params, 'warning', 'Email gecersiz', 'Lutfen gecerli bir email adresi girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$isEqualPasswordAndRePassword)
+        {
+            $this->alertReturn($params, 'warning', 'Parola Uyusmazligii', 'Lutfen uyumlu parola girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$doesEmailExist)
+        {
+            $this->alertReturn($params, 'warning', 'Email Adresi Kullaniliyor', 'Bu email adresi kullanilmaktadir. Lutfen baska bir email adresi giriniz.',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
         }
 
         
