@@ -16,6 +16,7 @@ $config = [
             'db_dsn'                    => 'mysql:host=localhost;dbname=blog;charset=utf8',
             'db_usr'                    => 'root',
             'db_pwd'                    => '',
-            'article_page_limit'        => 3
+            'article_page_limit'        => 5,
+            'user_page_limit'           => 5
 
 ];

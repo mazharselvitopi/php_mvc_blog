@@ -3,11 +3,34 @@ class AdminController extends Controller
 {
     public function indexActionGetRequest ($params = [])
     {
-        if($params['is_entered'] == false) {
-            $this->alertReturn($params, "danger", "Erisim Problemi", "Bu sayfaya erisemezsiniz",
-            $this->config['root_url'].'main/index', 'Anasayfa');
-        } else {
-            
-        }
+        $this->renderUserLevelAdmin('admin/index', $params);
+    }
+
+    public function userActionGetRequest ($params = [])
+    {
+        $userService = $this->service('User');
+        $params = $userService->getUsersOnPage($params);
+
+        $this->renderUserLevelAdmin('admin/users', $params);
+    }
+
+    public function userUpdateGetRequest ($params = [])
+    {
+
+    }
+
+    public function userUpdatePostRequest ($params = [])
+    {
+
+    }
+
+    public function userDeleteGetRequest ($params = [])
+    {
+
+    }
+
+    public function userDeletPostRequest ($params = [])
+    {
+        
     }
 }

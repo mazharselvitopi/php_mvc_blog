@@ -28,9 +28,9 @@ class MainController extends Controller
                 }
 
                 if ($data != null) {
-                    echo 'girdim';
                     $_SESSION['username'] = $data['email'];
                     $_SESSION['password'] = $data['password'];
+                    $_SESSION['user_level'] = $data['user_level'];
                     $this->redirect('main/index');
                 }else {
                     $this->alertReturn($params, 
@@ -112,18 +112,12 @@ class MainController extends Controller
 
         $articleService = $this->service("Article");
         
-        $data = $articleService->getArticles($params);
-        $params['articles'] = $data['articles'];
-        $params['count_page'] = $data['count_page'];
-        $params['now_page'] = $data['now_page'];
-
-        if (isset ($params['category']))
-        $params['now_category'] = $params['category'];
+        $params = $articleService->getArticles($params);
 
         $categoryService = $this->service("Category");
+        
         $params['categories'] = $categoryService->getCategoryList();
-
-
+        
         $this->render("index", $params);
 
     }
@@ -144,10 +138,6 @@ class MainController extends Controller
 
        $this->render('readArticle', $params );
     }
-
-
-
-    
     
 
 }

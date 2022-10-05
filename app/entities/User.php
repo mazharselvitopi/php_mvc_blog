@@ -7,8 +7,20 @@ class User
     private $surname;
     private $email;
     private $password;
+    private $userLevel;
     private $createdDate;
     private $updatedDate;
+
+    public function setUserLevel ($userLevel)
+    {
+        $this->userLevel = $userLevel;
+        return $this;
+    }
+
+    public function getUserLevel ()
+    {
+        return $this->userLevel;
+    }
 
     public function setUpdatedDate ($updatedDate)
     {

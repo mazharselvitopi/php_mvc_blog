@@ -14,26 +14,35 @@ class ArticleRepo extends Repo
     public function getArticleWithPage ($page)
     {
         $this->limit = $this->config['article_page_limit'];
+       
         if ( $page < 1 ) $page = 0;
         else $page--;
+       
         $offset = $page * $this->limit;
 
         $query = "select * from articles order by id limit ?, ?";
+
         $stmt = $this->db->prepare ($query);
+
         $stmt->bindValue(1, $offset, PDO::PARAM_INT);
         $stmt->bindValue(2, $this->limit, PDO::PARAM_INT);
+
         $stmt->execute ();
+
         $articleList = $stmt->fetchAll();
+
         $data = [];
+
         foreach ($articleList as $article){
-            $articleEntity = $articleEntity = $this->getArticleEntity($article);
+            $articleEntity = $this->getArticleEntity($article);
+
             $data[] = $articleEntity;
         }
 
         return $data;
     }
 
-    public function getArticleWithPageInCategory ($page, $categoryId)
+    public function getArticleWithPageOnCategory ($page, $categoryId)
     {
         $this->limit = $this->config['article_page_limit'];
         if ( $page < 1 ) $page = 0;
@@ -44,13 +53,19 @@ class ArticleRepo extends Repo
         $offset = $page * $this->limit;
 
         $query = "select * from articles where category_id = ? order by id limit ?, ?";
+        
         $stmt = $this->db->prepare ($query);
+        
         $stmt->bindValue(1, $categoryId, PDO::PARAM_INT);
         $stmt->bindValue(2, $offset, PDO::PARAM_INT);
         $stmt->bindValue(3, $this->limit, PDO::PARAM_INT);
+        
         $stmt->execute ();
+        
         $articleList = $stmt->fetchAll();
+        
         $data = [];
+        
         foreach ($articleList as $article){
             $articleEntity = $this->getArticleEntity($article);
             $data[] = $articleEntity;
@@ -67,7 +82,7 @@ class ArticleRepo extends Repo
         return $articlesCount['total'];
     }
 
-    public function countArticlesInCategory ($categoryId)
+    public function countArticlesOnCategory ($categoryId)
     {
         $articlesCount = $this->fetch("select count(*)  as total from articles where category_id = ?", [$categoryId]);
 

@@ -1,6 +1,48 @@
 <?php
 class UserRepo extends Repo
 {
+    public function getUsersOnPage ($page) 
+    {
+        $limit = $this->config['user_page_limit'];
+        
+        if ($page < 1) $page = 0;
+        else $page--;
+
+        $offset = $page * $limit;
+
+        $query = 'select * from users order by id limit ?, ?';
+
+        $stmt = $this->db->prepare ($query);
+
+        $stmt->bindValue(1, $offset, PDO::PARAM_INT);
+        $stmt->bindValue(2, $limit, PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $userList = $stmt->fetchAll();
+
+        $data = [];
+
+        foreach ($userList as $user) {
+            $userEntity = $this->getUserEntity($user);
+
+            $data[] = $userEntity;
+        }
+
+        return $data;
+
+    }
+
+    public function getTotalUsers ()
+    {
+        $query = 'select count(*) as total from users';
+
+        $total = $this->fetch($query)['total'];
+
+        return $total;
+
+    }
+
     public function getUserList ()
     {
         $usersData = $this->fetchAll("select * from users");

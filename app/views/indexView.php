@@ -1,10 +1,5 @@
 <?php
 
-$countArticle = $params['count_page'];
-$articlePageLimit = $params['config']['article_page_limit'];
-$totalPage = $countArticle / $articlePageLimit;
-if ($totalPage < 1) $totalPage = 1;
-$nowPage = $params['now_page'];
 require_once 'theme/topView.php';
 
 ?>
@@ -18,28 +13,28 @@ require_once 'theme/topView.php';
                 <h3 class="pb-4 mb-4 fst-italic border-bottom">
                     Blog Yazilarim
                 </h3>
-                <?php foreach ($params['articles'] as $article) {?>
+                <?php foreach ($params['data']['articles'] as $article) {?>
                 <article class="blog-post">
                     <h2 class="blog-post-title mb-1"><?=$article->getTitle()?></h2>
                     <p class="blog-post-meta"><?= $article->getCreatedDate()?> by <a href="#">Mazhar</a></p>
                     <?=$article->getSummary()?>
-                    <a href="<?=$config['root_url']?>main/read/article/<?=$article->getId()?>">Devamini Oku</a>
+                    <a href="<?=$params['config']['root_url']?>main/read/category/<?=$article->getCategoryId()?>/article/<?=$article->getId()?>">Devamini Oku</a>
                     
                 </article>
                 <?php } ?>
 
                 <nav class="blog-pagination" aria-label="Pagination">
                     <?php 
-                    for ($i = 1; $i <= $totalPage; $i++) {
-                        if ($i == $nowPage) {?>
+                    for ($i = 1; $i <= $params['total_page']; $i++) {
+                        if ($i == $params['page']) {?>
                             <a class="btn btn-outline-secondary rounded-pill disabled" ><?=$i?></a>
                     <?php } else {
                                 if (!isset ($params['now_category'])) {
                     ?>
-                            <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>main/index/page/<?=$i?>"><?=$i?></a>
-                    <?php } else {?>
-                                <a class="btn btn-outline-primary rounded-pill" href="<?=$config['root_url'] ?>main/index/category/<?=$params['now_category']?>/page/<?=$i?>"><?=$i?></a>
-                        <?php
+                                    <a class="btn btn-outline-primary rounded-pill" href="<?=$params['config']['root_url'] ?>main/index/page/<?=$i?>"><?=$i?></a>
+                            <?php } else {?>
+                                <a class="btn btn-outline-primary rounded-pill" href="<?=$params['config']['root_url'] ?>main/index/category/<?=$params['now_category']?>/page/<?=$i?>"><?=$i?></a>
+                            <?php
                     
                         }
                     }

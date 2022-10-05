@@ -31,6 +31,27 @@ class Controller
         View::render($this->config, $view, $params);
     }
 
+    public function renderUserLevelAdmin ($view, $params = [])
+    {
+        if($params['is_entered'] == false) 
+        {
+            $this->alertReturn($params, "danger", "Erisim Problemi", "Bu sayfaya erisemezsiniz",
+            $this->config['root_url'].'main/index', 'Anasayfa');
+        } 
+        else 
+        {
+            if ($params['user_level'] == 2)
+            {
+                $this->render($view, $params);
+            }
+            else
+            {
+                $this->alertReturn($params, "danger", "Erisim Problemi", "Bu sayfaya erisemezsiniz",
+                $this->config['root_url'].'main/index', 'Anasayfa');
+            }
+        }
+    }
+
     public function encrypt ($pass) 
     {
         $pass = sha1(base64_encode(md5(base64_encode($_POST['password']))));
@@ -90,128 +111,107 @@ class Controller
 
     public function controllerFileNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'warning', 
+            'title' => 'File not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git'
+            
+        ];
 
-        $this->render ('notFound', [
-                                            'is_entered' => $params['is_entered'],
-                                            'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'File not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                            
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function controllerNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'warning', 
+            'title' => 'Controller not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git'
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'Controller not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function actionNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'warning', 
+            'title' => 'Action not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git'
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'warning', 
-                                            'title' => 'Action not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git'
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function repoNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'danger', 
+            'title' => 'Repo not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git',
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Repo not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git',
-                                            'is_entered'        => $params['is_entered']
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function repoFileNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'danger', 
+            'title' => 'Repo file not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git',
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Repo file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git',
-                                            'is_entered'        => $params['is_entered']
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function viewFileNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'danger', 
+            'title' => 'View file not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git',
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'View file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git',
-                                            'is_entered'        => $params['is_entered']
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function serviceNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'danger', 
+            'title' => 'Service not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git'
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Service not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git',
-                                            'is_entered'        => $params['is_entered']
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
     public function serviceFileNotFoundActionGetRequest ($params = [])
     {
+        $params['alert'] = [
+            'type' => 'danger', 
+            'title' => 'Service file not found', 
+            'content' => 'please go to the link',
+            'link' => $this->config['root_url'],
+            'link_title' => 'Anasayfaya git',
+        ];
 
-        $this->render ('notFound', [
-                                        'is_entered' => $params['is_entered'],
-                                        'alert' =>  [
-                                            'type' => 'danger', 
-                                            'title' => 'Service file not found', 
-                                            'content' => 'please go to the link',
-                                            'link' => $this->config['root_url'],
-                                            'link_title' => 'Anasayfaya git',
-                                            'is_entered'        => $params['is_entered']
-                                        ]
-        ]);
+        $this->render ('notFound', $params);
     }
 
 }

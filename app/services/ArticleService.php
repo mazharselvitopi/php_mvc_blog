@@ -6,23 +6,28 @@ class ArticleService extends Service
     {
         $data = [];
         $articles = [];
-        $countPage = 0;
+        $totalArticles = 0;
         $params = $this->pagination($params);
 
         if (!isset($params['category'])){
             $articles = $this->getArticleWithPage($params['page']);
-            $countPage = $this->countArticles();
+            $totalArticles = $this->countArticles();
         } else {
-            $articles = $this->getArticleWithPageInCategory($params['page'], $params['category']);
-            $countPage = $this->countArticlesInCategory($params['category']);
+            $articles = $this->getArticleWithPageOnCategory($params['page'], $params['category']);
+            $totalArticles = $this->countArticlesOnCategory($params['category']);
         }
-        if ($countPage == 0) $countPage = 1;
+        if ($totalArticles < 0) $totalArticles = 1;
 
         $data['articles'] = $articles;
-        $data['count_page'] = $countPage; 
-        $data['now_page'] = $params['page'];
+        
+        $params['total_page'] = $totalArticles / $params['config']['article_page_limit'];
 
-        return $data;
+        if ($params['total_page'] > intval($params['total_page']))
+        $params['total_page']++;
+
+        $params['data'] = $data;
+
+        return $params;
     }
 
     public function getArticle ($id)
@@ -39,11 +44,11 @@ class ArticleService extends Service
         return $articleRepo->getArticleWithPage($page);
     }
 
-    public function getArticleWithPageInCategory ($page, $category)
+    public function getArticleWithPageOnCategory ($page, $category)
     {
         $articleRepo = $this->repo("Article");
 
-        return $articleRepo->getArticleWithPageInCategory($page, $category);
+        return $articleRepo->getArticleWithPageOnCategory($page, $category);
     }
 
     public function countArticles ()
@@ -52,26 +57,20 @@ class ArticleService extends Service
         return $articleRepo->countArticles();
     }
 
-    public function countArticlesInCategory ($categoryId)
+    public function countArticlesOnCategory ($categoryId)
     {
         $articleRepo = $this->repo ("Article");
-        return $articleRepo->countArticlesInCategory($categoryId);
+        return $articleRepo->countArticlesOnCategory($categoryId);
     }
 
     public function pagination ($params = [])
-    {
-        if (!isset($params['page'])) $params['page'] = 1;
-        elseif (isset($params['page'])) {
-            try {
-                $params['page'] = intval($params['page']);
-            } catch (\Throwable $th) {
-            }
-            if (!is_integer($params['page'])) {
-                $params['page'] = 1;
-            }
-        } else {
+    {   
+        if (!isset ($params['page']))
             $params['page'] = 1;
-        }
+        
+
+        if (intval($params['page']) == 0)
+            $params['page'] = 1;
 
         return $params;
     }

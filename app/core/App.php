@@ -8,13 +8,19 @@ class App
     protected $params;
     protected $mainUrl;
     protected $isEntered;
+    protected $userLevel;
 
 
     public function __construct($config)
     {
         if (isset($_SESSION['username']) && isset($_SESSION['password']))
+        {
+
             $this->isEntered = true;
-        else {
+            $this->userLevel= $_SESSION['user_level'];
+        }
+        else 
+        {
             
             $this->isEntered = false;
         }
@@ -60,6 +66,7 @@ class App
         $this->params['is_entered'] = $this->isEntered;
         $this->params['config']     = $config;
         $this->params['page_name']  = $pageName;
+        $this->params['user_level'] = $this->userLevel;
 
         if (file_exists($controllerFile)) {
             require_once $controllerFile;
@@ -92,7 +99,7 @@ class App
             $url = $this->mainUrl;
         }
         $urlArray = explode('/', filter_var(rtrim($url, '/'), FILTER_SANITIZE_URL));
-        if (count($urlArray) < 2) $urlArray[1] = 'default';
+        if (count($urlArray) < 2) $urlArray[1] = 'index';
         return $urlArray;
     }
 }

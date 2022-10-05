@@ -114,7 +114,9 @@
           <?php if ($params['is_entered']):?>
           <div class="text-end">
                 <a href="<?=$params['config']['root_url']?>main/logout" class="btn btn-danger">Logout</a>
-                <a href="<?=$params['config']['root_url']?>admin/index" class="btn btn-success">Admin Panel</a>
+                <?php if ($params['user_level'] == 2):?>
+                  <a href="<?=$params['config']['root_url']?>admin/index" class="btn btn-success">Admin Panel</a>
+                <?php endif;?>
           </div>
           <?php else: ?>
           <div class="text-end">

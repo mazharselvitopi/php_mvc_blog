@@ -2,6 +2,36 @@
 
 class UserService extends Service
 {
+    public function getUsersOnPage ($params = [])
+    {
+        if (!isset ($params['page']))
+            $params['page'] = 1;
+
+        if (intval($params['page']) == 0)
+            $params['page'] = 1;
+        
+        $nowPage = $params['page'];
+
+        $userRepo = $this->repo('User');
+
+        $users = $userRepo->getUsersOnPage($nowPage);
+
+        $totalUsers = $userRepo->getTotalUsers();
+
+        $limit = $params['config']['user_page_limit'];
+
+        $totalPage = $totalUsers / $limit;
+
+        if ($totalPage < 1) $totalPage = 1;
+        if ($totalPage > intval($totalPage)) $totalPage++;
+        
+        $params['data'] = $users;
+        $params['total_page'] = $totalPage;
+        $params['page'] = $nowPage;
+
+        return $params;
+    }
+
     public function getUserList ()
     {
         $userRepo = $this->repo('User');
