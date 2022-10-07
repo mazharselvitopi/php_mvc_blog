@@ -44,6 +44,15 @@ class UserService extends Service
         return $userRepo->getUser($email);
     }
 
+    public function getUserWithId ($params = [])
+    {
+        $userRepo = $this->repo('User');
+        $params['user'] = $userRepo->getUserWithId($params['id']);
+
+        return $params;
+
+    }
+
     public function doesEmailExist ($email)
     {
         $userRepo = $this->repo('User');
@@ -53,19 +62,161 @@ class UserService extends Service
     public function isCorrectEmailAndPassword ($email, $password)
     {
         $userRepo = $this->repo('User');
-        return $userRepo->isCorrectEmailAndPassword ($email, $password);
+        return $userRepo->isCorrectEmailAndPassword ($email, $this->encrypt($password));
     }
 
-    public function addUser ($name, $surname, $email, $password)
+    public function addUser ($params = [])
     {
         $userRepo = $this->repo('User');
-        return $userRepo->addUser($name, $surname, $email, $password);
+
+        $name = $_POST['name'];
+        $surname = $_POST['surname'];
+        $email = $_POST['email'];
+        $password = $this->encrypt($_POST['password']);
+        $rePassword = $this->encrypt($_POST['re_password']);
+
+        
+
+        $isEmpty = $name == '' || $surname == '' || $email == '' || $password == '' || $rePassword == '';
+        $validateEmail = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+        $isEqualPasswordAndRePassword = $password == $rePassword;
+        $doesEmailExist = $this->doesEmailExist($_POST['email']) == null;
+
+        if (!$isEmpty && $validateEmail && $isEqualPasswordAndRePassword && $doesEmailExist)
+        {
+            $userRepo->addUser($name, $surname, $email, $password);
+            
+            $params = $this->alertReturn($params, 'success', 'Tebrikler.. <b>'.$name.' '. $surname.'</b>', 'Tebrik ederiz. Basariyla kaydoldunuz. Simdi giris yapabilirsiniz.',
+                                $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif ($isEmpty)
+        {
+            $params = $this->alertReturn($params, 'warning', 'Bos alan', 'Bos alan girilemez',
+                                $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$validateEmail)
+        {
+            $params = $this->alertReturn($params, 'warning', 'Email gecersiz', 'Lutfen gecerli bir email adresi girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$isEqualPasswordAndRePassword)
+        {
+            $params = $this->alertReturn($params, 'warning', 'Parola Uyusmazligii', 'Lutfen uyumlu parola girin',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+        elseif (!$doesEmailExist)
+        {
+            $params = $this->alertReturn($params, 'warning', 'Email Adresi Kullaniliyor', 'Bu email adresi kullanilmaktadir. Lutfen baska bir email adresi giriniz.',
+                                    $this->config['root_url'].'main/index', 'Anasayfaya gidin...');
+        }
+
+        
+        return $params;
     }
 
-    public function updateUser ($name, $surname, $email, $password)
+    public function updateUser ($params = [])
     {
         $userRepo = $this->repo('User');
-        return $userRepo->updateUser($name, $surname, $email, $password);
+
+        $id = $_POST['id'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $surname = $_POST['surname'];
+        $oldPassword = $_POST['old_password'];
+        $newPassword = $_POST['new_password'];
+        $newPasswordAgain = $_POST['new_password_again'];
+        $userLevel = $_POST['user_level'];
+
+        $user = $userRepo->getUser($email);
+        
+        $password = $user->getPassword();
+
+        $isEmpty = $name == '' || $surname == '' || $userLevel == '';
+
+        $isOldPasswordEmpty = $oldPassword == '';
+
+        $areNewPasswordsEmpty = $newPassword == '' || $newPasswordAgain == '';
+
+        $doesThePasswordMatch = $newPassword == $newPasswordAgain;
+
+
+        if (!$isOldPasswordEmpty)
+        {
+            $oldPassword = $this->encrypt($oldPassword);
+        }
+        
+        $isOldPasswordTruth = $oldPassword == $password;
+
+        if (!$areNewPasswordsEmpty && $doesThePasswordMatch && !$isOldPasswordEmpty)
+        {
+            
+            $newPassword = $this->encrypt($newPassword);
+            $newPasswordAgain = $this->encrypt($newPasswordAgain);
+        }
+
+        $superAdmin = $params['config']['super_admin_id'] == $id;
+
+        if ($superAdmin)
+        {
+            if ($userLevel == 2)
+                $superAdmin = true;
+            else
+                $superAdmin = false;
+        }
+        else
+        {
+            $superAdmin = true;
+        }
+
+        if (!$isEmpty && $isOldPasswordEmpty && $superAdmin)
+        {
+            // ad soyad ve level degisiyor
+
+            $userRepo->updateUser( $id, $name, $surname, $password, $userLevel);
+            $params = $this->alertReturn($params, 'success', 'Guncelleme Basarili', 'Problemsiz bir sekilde guncellendi');
+        }
+        elseif (!$isEmpty && !$isOldPasswordEmpty && !$areNewPasswordsEmpty && $doesThePasswordMatch && $isOldPasswordTruth && $superAdmin)
+        {
+            // password burada degisiyor
+
+            $password = $newPassword;
+            $userRepo->updateUser( $id, $name, $surname, $password, $userLevel);
+
+            $params = $this->alertReturn($params, 'success', 'Guncelleme Basarili', 'Problemsiz bir sekilde guncellendi');
+        }
+        elseif ($isEmpty)
+        {
+            // eger ad soyad ve userlevel bos ise
+            $params = $this->alertReturn($params, 'warning', 'Guncelleme Basarisiz', 'Ad ve Soyad kismi bos olabilir');
+        }
+
+        elseif (!$isOldPasswordEmpty && !$isOldPasswordTruth)
+        {
+            // eger eski parola yanlis ise
+            $params = $this->alertReturn($params, 'warning', 'Guncelleme Basarisiz', 'Eski parolaniz yanlis '.$oldPassword.' | '.$user->getPassword() );
+        }
+        elseif (!$isOldPasswordEmpty && $isOldPasswordTruth && $areNewPasswordsEmpty)
+        {
+            // eger eski parola dogru ama yeni parolalar bos ise
+            $params = $this->alertReturn($params, 'warning', 'Guncelleme Basarisiz', 'Yeni parolalar bos');
+        }
+        elseif (!$isOldPasswordEmpty && $isOldPasswordTruth && !$areNewPasswordsEmpty && !$doesThePasswordMatch)
+        {
+            // eski parola dogru ama yeni parolalar eslesmiyor ise
+            $params = $this->alertReturn($params, 'warning', 'Guncelleme Basarisiz', 'Yeni Parolalar eslesmiyor');
+        }
+        elseif (!$superAdmin)
+        {
+            // superadmin level seviyesi degistiriliyor
+            $params = $this->alertReturn($params, 'danger', 'Guncelleme Basarisiz', 'Super admin yetkileri degistirilemez');
+        }
+        else
+        {
+            // bir problem var
+            $params = $this->alertReturn($params, 'warning', 'Guncelleme Basarisiz', 'Bir problem var');
+        }
+        
+        return $params;
     }
 
     public function deleteUser ($email)

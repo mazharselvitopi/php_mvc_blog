@@ -13,6 +13,7 @@ require_once 'admin_theme/topAdminView.php';
                     <th scope="col">Ad</th>
                     <th scope="col">Soyad</th>
                     <th scope="col">Email</th>
+                    <th scope="col">Kullanici Seviyesi</th>
                     <th scope="col">Kaydolma Tarihi</th>
                     <th scope="col">Guncellenme Tarihi</th>
                     <th scope="col">Guncelle</th>
@@ -32,7 +33,7 @@ require_once 'admin_theme/topAdminView.php';
                         <td><?=$data->getUserLevel()?></td>
                         <td><?=$data->getCreatedDate()?></td>
                         <td><?=$data->getUpdatedDate()?></td>
-                        <td><a href="<?=$params['config']['root_url']?>main/" class="btn btn-success">Guncelle</a></td>
+                        <td><a href="<?=$params['config']['root_url']?>admin/userupdate/id/<?=$data->getId()?>" class="btn btn-success">Guncelle</a></td>
                         <td><a href="<?=$params['config']['root_url']?>main/" class="btn btn-danger">Sil</a></td>
 
                     </tr>

@@ -14,23 +14,35 @@ class AdminController extends Controller
         $this->renderUserLevelAdmin('admin/users', $params);
     }
 
-    public function userUpdateGetRequest ($params = [])
+    public function userUpdateActionGetRequest ($params = [])
+    {
+        $userService = $this->service('User');
+
+        $params = $userService->getUserWithId($params);
+
+        $this->renderUserLevelAdmin('admin/userUpdate', $params);
+
+
+    }
+
+    public function userUpdateActionPostRequest ($params = [])
+    {
+        $userService = $this->service('User');
+
+        $params = $userService->updateUser($params);
+
+        $params = $userService->getUserWithId($params);
+
+        $this->renderUserLevelAdmin('admin/userUpdate', $params);
+    }
+
+    public function userDeleteActionGetRequest ($params = [])
     {
 
     }
 
-    public function userUpdatePostRequest ($params = [])
+    public function userDeleteActionPostRequest ($params = [])
     {
 
-    }
-
-    public function userDeleteGetRequest ($params = [])
-    {
-
-    }
-
-    public function userDeletPostRequest ($params = [])
-    {
-        
     }
 }

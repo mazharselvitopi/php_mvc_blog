@@ -42,21 +42,16 @@ class Controller
         {
             if ($params['user_level'] == 2)
             {
+                
                 $this->render($view, $params);
             }
             else
             {
                 $this->alertReturn($params, "danger", "Erisim Problemi", "Bu sayfaya erisemezsiniz",
                 $this->config['root_url'].'main/index', 'Anasayfa');
+                
             }
         }
-    }
-
-    public function encrypt ($pass) 
-    {
-        $pass = sha1(base64_encode(md5(base64_encode($_POST['password']))));
-        $pass = substr($pass, 0, 32);
-        return $pass;
     }
 
     public function redirect ($url) 
@@ -64,7 +59,7 @@ class Controller
         header('Location: '.$this->config['root_url'].$url);
     }
 
-    public function alertReturn ($sendData, 
+    public function alertReturn ($params, 
     $type = 'info', 
     $title = 'Bilgilendirme',
     $content = '',
@@ -72,7 +67,7 @@ class Controller
     $link_title = '')
     {
         if ($content != '' && $link != '' && $link_title != '') {
-            $sendData['alert'] = [
+            $params['alert'] = [
                 'type' => $type,
                 'title' => $title,
                 'content' => $content,
@@ -80,20 +75,20 @@ class Controller
                 'link_title' => $link_title
             ];
         } elseif ($content != '') {
-            $sendData['alert'] = [
+            $params['alert'] = [
                 'type' => $type,
                 'title' => $title,
                 'content' => $content,
             ];
         } else {
-            $sendData['alert'] = [
+            $params['alert'] = [
                 'type' => $type,
                 'title' => $title,
             ];
         }
         
-        $sendData['page_name'] = $sendData['alert']['title'];
-        $this->render ('returnAlert', $sendData);
+        $params['page_name'] = $params['alert']['title'];
+        $this->render ('returnAlert', $params);
     }
 
     //////////////  Hatalar //////////////////////////
@@ -184,7 +179,7 @@ class Controller
             'link' => $this->config['root_url'],
             'link_title' => 'Anasayfaya git',
         ];
-
+        
         $this->render ('notFound', $params);
     }
 

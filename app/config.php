@@ -17,6 +17,12 @@ $config = [
             'db_usr'                    => 'root',
             'db_pwd'                    => '',
             'article_page_limit'        => 5,
-            'user_page_limit'           => 5
+            'user_page_limit'           => 5,
+            'user_levels'               => [
+                0 => 'Basic',
+                1 => 'Editor',
+                2 => 'Admin'
+            ],
+            'super_admin_id'            => 1
 
 ];

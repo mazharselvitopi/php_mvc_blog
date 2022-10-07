@@ -64,6 +64,14 @@ class UserRepo extends Repo
         return $userEntity;
     }
 
+    public function getUserWithId ($id)
+    {
+        $user = $this->fetch ('select * from users where id = ?', [$id]);
+        $userEntity = $this->getUserEntity($user);
+
+        return $userEntity;
+    }
+
     public function doesEmailExist ($email)
     {
         $userData = $this->fetch ("select * from users where email = ?", [$email]);
@@ -89,10 +97,10 @@ class UserRepo extends Repo
         return $stmt->execute();
     }
 
-    public function updateUser ($name, $surname, $email, $password)
+    public function updateUser ($id, $name, $surname, $password, $userLevel)
     {
-        $query = "update users set name = ?, surname = ?, password = ? where email = ?";
-        return $this->query($query, [$name, $surname, $password, $email]);
+        $query = "update users set name = ?, surname = ?, password = ? , user_level = ? where id = ?";
+        return $this->query($query, [$name, $surname, $password, $userLevel, $id]);
 
     }
 
@@ -109,6 +117,8 @@ class UserRepo extends Repo
                     ->setName($user['name'])
                     ->setSurname($user['surname'])
                     ->setEmail($user['email'])
+                    ->setPassword($user['password'])
+                    ->setUserLevel($user['user_level'])
                     ->setCreatedDate($user['created_date'])
                     ->setUpdatedDate($user['updated_date']);
         
