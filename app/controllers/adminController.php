@@ -38,7 +38,15 @@ class AdminController extends Controller
 
     public function userDeleteActionGetRequest ($params = [])
     {
+        $userService = $this->service('User');
 
+
+
+        $params = $userService->deleteUser($params);
+
+        $params = $userService->getUsersOnPage($params);
+
+        $this->renderUserLevelAdmin('admin/users', $params );
     }
 
     public function userDeleteActionPostRequest ($params = [])

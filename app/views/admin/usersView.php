@@ -34,7 +34,7 @@ require_once 'admin_theme/topAdminView.php';
                         <td><?=$data->getCreatedDate()?></td>
                         <td><?=$data->getUpdatedDate()?></td>
                         <td><a href="<?=$params['config']['root_url']?>admin/userupdate/id/<?=$data->getId()?>" class="btn btn-success">Guncelle</a></td>
-                        <td><a href="<?=$params['config']['root_url']?>main/" class="btn btn-danger">Sil</a></td>
+                        <td><a href="<?=$params['config']['root_url']?>admin/userdelete/id/<?=$data->getId()?>/page/<?=$params['page']?>" class="btn btn-danger">Sil</a></td>
 
                     </tr>
                 <?php endforeach; ?>
@@ -64,6 +64,8 @@ require_once 'admin_theme/topAdminView.php';
             <?php endfor; ?>
         </ul>
     </nav>
+
+    <?php require_once $params['config']['views_dir'].'/theme/alertView.php';?>
 </main>
 
 <?php

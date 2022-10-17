@@ -14,8 +14,6 @@ class UserService extends Service
 
         $userRepo = $this->repo('User');
 
-        $users = $userRepo->getUsersOnPage($nowPage);
-
         $totalUsers = $userRepo->getTotalUsers();
 
         $limit = $params['config']['user_page_limit'];
@@ -24,7 +22,8 @@ class UserService extends Service
 
         if ($totalPage < 1) $totalPage = 1;
         if ($totalPage > intval($totalPage)) $totalPage++;
-        
+        if ($totalPage < $nowPage) $nowPage = $totalPage;
+        $users = $userRepo->getUsersOnPage($nowPage);
         $params['data'] = $users;
         $params['total_page'] = $totalPage;
         $params['page'] = $nowPage;
@@ -219,10 +218,25 @@ class UserService extends Service
         return $params;
     }
 
-    public function deleteUser ($email)
+    public function deleteUser ($params)
     {
+        $id = $params['id'];
         $userRepo = $this->repo('User');
-        return $userRepo->deleteUser($email);
-
+        if ($id == $params['config']['super_admin_id'])
+        {
+            $params = $this->alertReturn($params, 'danger', 'Silme Basarisiz', 'Super Admin Silinemez');
+        }
+        else
+        {
+            if ($userRepo->deleteUser($id))
+            {
+                $params = $this->alertReturn($params, 'success', 'Silme Basarili', 'Basariyla kayit silindi.');
+            }
+            else
+            {
+                $params = $this->alertReturn($params, 'danger', 'Silme Basarisiz', 'Bir problem var');
+            }
+        }
+        return $params;
     }
 }

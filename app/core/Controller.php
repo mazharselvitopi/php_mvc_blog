@@ -7,7 +7,7 @@ class Controller
         $this->config = $config;   
     }
 
-    public function service ($service) 
+    public function service ($service)
     {
         $serviceFile = $this->config['services_dir'].$service.'Service.php';
         $serviceClass = $service.'Service';
@@ -18,11 +18,11 @@ class Controller
                 $serviceClass->setConfig ($this->config);
                 return $serviceClass;
             } else {
-                header('Location: '.$config['root_url'].'main/serviceNotFound');
+                header('Location: '.$this->config['root_url'].'main/serviceNotFound');
                 //exit ('Service sinifi bulunamadi: ' . $serviceClass);
             }
         } else {
-            header('Location: '.$config['root_url'].'main/serviceFileNotFound');
+            header('Location: '.$this->config['root_url'].'main/serviceFileNotFound');
         }
     }
 

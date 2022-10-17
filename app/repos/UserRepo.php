@@ -104,10 +104,10 @@ class UserRepo extends Repo
 
     }
 
-    public function deleteUser ($email)
+    public function deleteUser ($id)
     {
-        $query = "delete from users where email = ?";
-        return $this->query($query, [$email]);
+        $query = "delete from users where id = ?";
+        return $this->query($query, [$id]);
     }
 
     public function getUserEntity ($user)

@@ -9,7 +9,7 @@ class Service
         $this->config = $config;   
     }
 
-    public function repo ($repo) 
+    public function repo ($repo)
     {
         $repoFile = $this->config['repos_dir'].$repo.'Repo.php';
         $repoClass = $repo.'Repo';
