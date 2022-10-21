@@ -74,7 +74,12 @@ class UserService extends Service
         $password = $this->encrypt($_POST['password']);
         $rePassword = $this->encrypt($_POST['re_password']);
 
-        
+        $params['data']['name'] = $name;
+        $params['data']['surname'] = $surname;
+        $params['data']['email'] = $email;
+        $params['data']['password'] = $_POST['password'];
+        $params['data']['re_password'] = $_POST['re_password'];
+
 
         $isEmpty = $name == '' || $surname == '' || $email == '' || $password == '' || $rePassword == '';
         $validateEmail = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);

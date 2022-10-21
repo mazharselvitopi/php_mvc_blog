@@ -29,6 +29,9 @@ class Repo
     public function query ($query, $params = [])
     {
         $stmt = $this->db->prepare($query);
+
+        // donus degeri true yada false olur.
+        // execute isleminin donus degeri true yada false olur
         return $stmt->execute($params);
     }
 

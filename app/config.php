@@ -18,6 +18,7 @@ $config = [
             'db_pwd'                    => '',
             'article_page_limit'        => 1,
             'user_page_limit'           => 2,
+            'category_page_limit'       => 2,
             'user_levels'               => [
                 0 => 'Basic',
                 1 => 'Editor',

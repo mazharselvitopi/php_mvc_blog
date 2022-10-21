@@ -49,8 +49,26 @@ class AdminController extends Controller
         $this->renderUserLevelAdmin('admin/users', $params );
     }
 
-    public function userDeleteActionPostRequest ($params = [])
+    public function userAddActionPostRequest ($params = [])
     {
+        $userService = $this->service('User');
 
+        $params = $userService->addUser($params);
+
+        $this->renderUserLevelAdmin('admin/useradd', $params);
+    }
+
+    public function userAddActionGetRequest ($params = [])
+    {
+        $this->renderUserLevelAdmin('admin/useradd', $params);
+    }
+
+    public function categoriesActionGetRequest ($params = [])
+    {
+        $categoryService = $this->service('Category');
+
+        $params = $categoryService->getCategoriesOnPage ($params);
+
+        $this->renderUserLevelAdmin('admin/categories', $params);
     }
 }

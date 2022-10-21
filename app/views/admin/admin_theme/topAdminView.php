@@ -84,75 +84,55 @@
                 <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                     <div class="position-sticky pt-3 sidebar-sticky">
                         <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="<?=$params['config']['root_url']?>admin/user">
-                            <span data-feather="home" class="align-text-bottom"></span>
-                            Kullanicilar
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file" class="align-text-bottom"></span>
-                            Kullanici Sil
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart" class="align-text-bottom"></span>
-                            Kullanici Guncelle
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="users" class="align-text-bottom"></span>
-                            Kullanici Ekle
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="bar-chart-2" class="align-text-bottom"></span>
-                            Reports
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="layers" class="align-text-bottom"></span>
-                            Integrations
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link"  href="<?=$params['config']['root_url']?>admin/">
+                                <span data-feather="home" class="align-text-bottom"></span>
+                                Anasayfa
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"  href="<?=$params['config']['root_url']?>admin/user">
+                                    <span data-feather="users" class="align-text-bottom"></span>
+                                    Kullanicilar
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?=$params['config']['root_url']?>admin/useradd">
+                                <span data-feather="user-plus" class="align-text-bottom"></span>
+                                Kullanici Ekle
+                                </a>
+                            </li>
+
                         </ul>
 
                         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted text-uppercase">
-                        <span>Saved reports</span>
-                        <a class="link-secondary" href="#" aria-label="Add a new report">
-                            <span data-feather="plus-circle" class="align-text-bottom"></span>
-                        </a>
+                        <span>Yazilar</span>
                         </h6>
                         <ul class="nav flex-column mb-2">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file-text" class="align-text-bottom"></span>
-                            Current month
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file-text" class="align-text-bottom"></span>
-                            Last quarter
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file-text" class="align-text-bottom"></span>
-                            Social engagement
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                            <span data-feather="file-text" class="align-text-bottom"></span>
-                            Year-end sale
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?=$params['config']['root_url']?>admin/categories">
+                                    <span data-feather="briefcase" class="align-text-bottom"></span>
+                                    Kategoriler
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="folder-plus" class="align-text-bottom"></span>
+                                    Kategori Ekle
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                <span data-feather="book" class="align-text-bottom"></span>
+                                Yazilar
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                <span data-feather="book-open" class="align-text-bottom"></span>
+                                    Yazi ekle
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </nav>
