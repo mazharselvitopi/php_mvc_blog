@@ -38,7 +38,7 @@ class CategoryService extends Service
 
         return $params;
     }
-    public function categoryAdd ($params)
+    public function addCategory ($params)
     {
         $categoryRepo = $this->repo('Category');
         $title = '';
@@ -51,7 +51,7 @@ class CategoryService extends Service
         {
             if (!$categoryRepo->isThereCategory($title))
             {
-                $categoryRepo->categoryAdd($title);
+                $categoryRepo->addCategory($title);
                 $params = $this->alertReturn($params, 'success', 'Basarili', 'Kategori basariyla eklendi.');
             }
             else

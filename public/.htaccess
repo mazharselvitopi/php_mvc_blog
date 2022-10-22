@@ -1,7 +1,6 @@
 options -multiviews
 
 rewriteengine on
-rewritebase /mvc_learn5/public
 rewritecond %{REQUEST_FILENAME} !-d
 rewritecond %{REQUEST_FILENAME} !-f
 rewriterule ^(.*)$ index.php?url=$1 [qsa,l]

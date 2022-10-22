@@ -239,7 +239,7 @@ class UserService extends Service
             }
             else
             {
-                $params = $this->alertReturn($params, 'danger', 'Silme Basarisiz', 'Bir problem var');
+                $params = $this->alertReturn($params, 'danger', 'Silme Basarisiz', 'Bir problem var.');
             }
         }
         return $params;

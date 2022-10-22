@@ -116,7 +116,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link" href="<?=$params['config']['root_url']?>admin/addcategory">
                                     <span data-feather="folder-plus" class="align-text-bottom"></span>
                                     Kategori Ekle
                                 </a>
