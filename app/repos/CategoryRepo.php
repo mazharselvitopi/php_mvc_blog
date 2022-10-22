@@ -24,7 +24,8 @@ class CategoryRepo extends Repo
         $query = "select * from categories where title = ?";
 
         $category = $this->fetch($query, [$title]);
-
+        if (!$category) return false;
+        else
         return $this->getCategoryEntity($category);
     }
 

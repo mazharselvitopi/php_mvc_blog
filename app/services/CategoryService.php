@@ -16,6 +16,15 @@ class CategoryService extends Service
         return $categoryRepo->getCategoryList();
     }
 
+    public function getCategoryWithId ($params)
+    {
+        $categoryRepo = $this->repo('Category');
+
+        $params['data'] = $categoryRepo->getCategory($params['id']);
+
+        return $params;
+    }
+
     public function getCategoriesOnPage ($params)
     {
         $categoryRepo = $this->repo('Category');
@@ -67,17 +76,56 @@ class CategoryService extends Service
         return $params;
     }
 
-    public function categoryUpdate ($params)
+    public function updateCategory ($params)
     {
 
+        if (isset($params['id']) && isset($_POST['title']))
+        {
+            $id = $params['id'];
+            $title = $_POST['title'];
+            
+            $categoryRepo = $this->repo('Category');
+            
+            $isThereTitle = $categoryRepo->getCategoryWithTitle($title);
+            
+            if (!$isThereTitle)
+            {
+                
+                $categoryRepo->updateCategory($id, $title);
+
+                $params = $this->alertReturn($params, "success", "Guncelleme basarili", "Guncelleme basarili oldu.");
+
+            }
+            else
+            {
+                if ($isThereTitle->getId() == $id)
+                {
+                    $params = $this->alertReturn($params, "warning", "Guncelleme basarisiz", "Degisen birsey yok. Onun icin sorgu calistirilmadi.");
+                }
+                else 
+                {
+                    $params = $this->alertReturn($params, "danger", "Guncelleme basarisiz", "Lutfen baska bir kategori adi deneyin. Giridiginiz kategori suanda var.");
+                }
+            }
+        }
 
         return $params;
     }
 
-    public function categoryDelete ($params)
+    public function deleteCategory ($params)
     {
 
+        $categoryRepo = $this->repo('Category');
+        $isDelete = $categoryRepo->deleteCategory($params['id']);
 
+        if ($isDelete)
+        {
+            $params = $this->alertReturn($params, 'danger', 'Silinemedi.', 'Bir problem var. Silinemedi.');
+        }
+        else
+        {
+            $params = $this->alertReturn($params, 'success', 'Basariyla silindi', 'Kategori basariyla silindi.');
+        }
         return $params;
     }
 

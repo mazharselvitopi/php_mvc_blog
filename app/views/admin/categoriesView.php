@@ -27,8 +27,8 @@ require_once 'admin_theme/topAdminView.php';
                     <td><?=$data->getTitle()?></td>
                     <td><?=$data->getCreatedDate()?></td>
                     <td><?=$data->getUpdatedDate()?></td>
-                    <td><a href="<?=$params['config']['root_url']?>admin/categoryupdate/id/<?=$data->getId()?>" class="btn btn-success">Guncelle</a></td>
-                    <td><a href="<?=$params['config']['root_url']?>admin/categorydelete/id/<?=$data->getId()?>/page/<?=$params['page']?>" class="btn btn-danger">Sil</a></td>
+                    <td><a href="<?=$params['config']['root_url']?>admin/updatecategory/id/<?=$data->getId()?>/page/<?=$params['page']?>" class="btn btn-success">Guncelle</a></td>
+                    <td><a href="<?=$params['config']['root_url']?>admin/deletecategory/id/<?=$data->getId()?>/page/<?=$params['page']?>" class="btn btn-danger">Sil</a></td>
 
                 </tr>
             <?php endforeach; ?>

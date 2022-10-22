@@ -89,4 +89,24 @@ class AdminController extends Controller
 
         $this->renderUserLevelAdmin("admin/addCategory", $params);
     }
+
+    public function updateCategoryActionGetRequest ($params)
+    {
+        $categoryService = $this->service('Category');
+
+        $params = $categoryService->getCategoryWithId($params);
+
+        $this->renderUserLevelAdmin('admin/updateCategory', $params);
+    }
+
+    public function updateCategoryActionPostRequest ($params)
+    {
+        $categoryService = $this->service('Category');
+
+        $params = $categoryService->updateCategory($params);
+
+        $params = $categoryService->getCategoriesOnPage($params);
+
+        $this->renderUserLevelAdmin('admin/categories', $params);
+    }
 }
