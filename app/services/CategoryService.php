@@ -118,7 +118,7 @@ class CategoryService extends Service
         $categoryRepo = $this->repo('Category');
         $isDelete = $categoryRepo->deleteCategory($params['id']);
 
-        if ($isDelete)
+        if (!$isDelete)
         {
             $params = $this->alertReturn($params, 'danger', 'Silinemedi.', 'Bir problem var. Silinemedi.');
         }

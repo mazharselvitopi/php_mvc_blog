@@ -109,4 +109,15 @@ class AdminController extends Controller
 
         $this->renderUserLevelAdmin('admin/categories', $params);
     }
+
+    public function deleteCategoryActionGetRequest ($params)
+    {
+        $categoryService = $this->service('Category');
+
+        $params = $categoryService->deleteCategory($params);
+
+        $params = $categoryService->getCategoriesOnPage($params);
+
+        $this->renderUserLevelAdmin('admin/categories', $params);
+    }
 }
